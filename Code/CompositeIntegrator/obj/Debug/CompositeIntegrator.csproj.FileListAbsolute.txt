@@ -1,0 +1,7 @@
+C:\Users\adamk\OneDrive\Documents\GitHub\final-project-adamk96\Code\CompositeIntegrator\obj\Debug\CompositeIntegrator.csprojAssemblyReference.cache
+C:\Users\adamk\OneDrive\Documents\GitHub\final-project-adamk96\Code\CompositeIntegrator\obj\Debug\CompositeIntegrator.csproj.CoreCompileInputs.cache
+C:\Users\adamk\OneDrive\Documents\GitHub\final-project-adamk96\Code\CompositeIntegrator\bin\Debug\CompositeIntegrator.dll.config
+C:\Users\adamk\OneDrive\Documents\GitHub\final-project-adamk96\Code\CompositeIntegrator\bin\Debug\CompositeIntegrator.dll
+C:\Users\adamk\OneDrive\Documents\GitHub\final-project-adamk96\Code\CompositeIntegrator\bin\Debug\CompositeIntegrator.pdb
+C:\Users\adamk\OneDrive\Documents\GitHub\final-project-adamk96\Code\CompositeIntegrator\obj\Debug\CompositeIntegrator.dll
+C:\Users\adamk\OneDrive\Documents\GitHub\final-project-adamk96\Code\CompositeIntegrator\obj\Debug\CompositeIntegrator.pdb
