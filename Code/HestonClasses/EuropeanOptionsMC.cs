@@ -29,6 +29,10 @@ namespace HestonClasses
 
         public EuropeanOptionsMC(double r, double T, double K, double kappaStar, double thetaStar, double sigma, double rho, double v, double S)
         {
+            if (2 * kappaStar * thetaStar <= sigma * sigma) 
+            {
+                throw new System.ArgumentException("Feller condition violated.");
+            }
             //throw usual exceptions, Feller condition
             this.r = r; this.T = T;
             this.K = K; this.kappaStar = kappaStar; this.thetaStar = thetaStar;
@@ -40,6 +44,10 @@ namespace HestonClasses
             this.r = r; this.T = T;
             this.K = K; kappaStar = paramss[kappaIndex]; thetaStar = paramss[thetaIndex];
             sigma = paramss[sigmaIndex]; rho = paramss[rhoIndex]; v = paramss[vIndex]; this.S = S;
+            if (2 * kappaStar * thetaStar <= sigma * sigma)
+            {
+                throw new System.ArgumentException("Feller condition violated.");
+            }
         }
 
         public double EuropeanCallOptionPriceMC(int N, int numberPaths)
