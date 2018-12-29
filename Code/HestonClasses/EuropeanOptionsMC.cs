@@ -92,7 +92,7 @@ namespace HestonClasses
                 double priceCount = 0;
                 double holder = S;
                 double deltaT = T[0]; // this make sense? assume start point is 0. or we could make T[0] = 0
-                MCPaths path = new MCPaths(r, N, kappaStar, thetaStar, sigma, rho, v);
+                MCPaths path = new MCPaths(r, N, kappaStar, thetaStar, sigma, rho, v); //may need variable N
                 for (int j = 0; j < M; j++)
                 {
                     if (j > 0)
@@ -106,5 +106,29 @@ namespace HestonClasses
             return Math.Exp(-r * exerciseT) * (pathCounter / numberPaths);
         }
 
+        public double PriceLookbackCallMC(double exerciseT, int numberPaths, int N)
+        {
+            double pathCounter = 0;
+
+
+            double deltaT = exerciseT / N;
+            MCPaths path = new MCPaths(r, 1, kappaStar, thetaStar, sigma, rho, v); // think about N=1 here
+            for (double i = 0; i < numberPaths; i++)
+            {
+                double min = S;
+                double holder = S;
+                for (double j = 0; j <= exerciseT; j += deltaT)
+                {
+                    holder = path.PathGenerator(deltaT, holder);
+                    if (holder < min)
+                        min = holder;
+                }
+
+                pathCounter += holder - min;
+            }
+            return Math.Exp(-r * exerciseT) * (pathCounter / numberPaths);
+        }
     }
+
 }
+
