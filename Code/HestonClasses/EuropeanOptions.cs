@@ -26,7 +26,7 @@ namespace HestonClasses
         private double rho;
         private double v;
         private double S;
-        // note I am not thinking this class through, may move into the interfaces, this just a start.
+        
 
         public EuropeanOptions(double r, double S, double kappaStar, double thetaStar, double sigma, double rho, double v)
         {

@@ -34,7 +34,7 @@ namespace HestonClasses
 
     public class Calibrator
     {
-        private const double defaultAccuracy = 10e-3;
+        private const double defaultAccuracy = 1/1000;
         private const int defaultMaxIts = 1000;
         private double accuracy;
         private int maxIts;
@@ -107,9 +107,9 @@ namespace HestonClasses
             outcome = CalibrationOutcome.NotStarted;
 
             double[] initialParams = new double[EuropeanOptions.numberParams];
-            calibratedParams.CopyTo(initialParams, 0);  // a reasonable starting guees
+            calibratedParams.CopyTo(initialParams, 0);  
             double epsg = accuracy;
-            double epsf = accuracy; //1e-4;
+            double epsf = accuracy; 
             double epsx = accuracy;
             double diffstep = 1.0e-6;
             int maxits = maxIts; //why do
@@ -119,7 +119,7 @@ namespace HestonClasses
 
             alglib.minlbfgsstate state;
             alglib.minlbfgsreport rep;
-            alglib.minlbfgscreatef(1, initialParams, diffstep, out state);
+            alglib.minlbfgscreatef(4, initialParams, diffstep, out state);
             alglib.minlbfgssetcond(state, epsg, epsf, epsx, maxits);
             alglib.minlbfgssetstpmax(state, stpmax);
 
@@ -132,25 +132,23 @@ namespace HestonClasses
             System.Console.WriteLine("Num iterations {0}", rep.iterationscount);
             System.Console.WriteLine("{0}", alglib.ap.format(resultParams, 5));
 
-            if (rep.terminationtype == 1			// relative function improvement is no more than EpsF.
-                || rep.terminationtype == 2			// relative step is no more than EpsX.
+            if (rep.terminationtype == 1			
+                || rep.terminationtype == 2			
                 || rep.terminationtype == 4)
-            {    	// gradient norm is no more than EpsG
+            {    	
                 outcome = CalibrationOutcome.FinishedOK;
-                // we update the ''inital parameters''
                 calibratedParams = resultParams;
             }
             else if (rep.terminationtype == 5)
-            {	// MaxIts steps was taken
+            {	
                 outcome = CalibrationOutcome.FailedMaxItReached;
-                // we update the ''inital parameters'' even in this case
                 calibratedParams = resultParams;
 
             }
             else
             {
                 outcome = CalibrationOutcome.FailedOtherReason;
-                throw new CalibrationFailedException("Vasicek model calibration failed badly.");
+                throw new CalibrationFailedException("Heston model calibration failed badly.");
             }
         }
 

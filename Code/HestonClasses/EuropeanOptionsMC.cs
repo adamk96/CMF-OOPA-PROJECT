@@ -18,7 +18,7 @@ namespace HestonClasses
         private const int vIndex = 4;
 
         private double r;
-        private double T;
+       // private double T;
         private double K;
         private double kappaStar;
         private double thetaStar;
@@ -27,21 +27,21 @@ namespace HestonClasses
         private double v;
         private double S;
 
-        public EuropeanOptionsMC(double r, double T, double K, double kappaStar, double thetaStar, double sigma, double rho, double v, double S)
+        public EuropeanOptionsMC(double r, double K, double kappaStar, double thetaStar, double sigma, double rho, double v, double S)
         {
             if (2 * kappaStar * thetaStar <= sigma * sigma) 
             {
                 throw new System.ArgumentException("Feller condition violated.");
             }
             //throw usual exceptions, Feller condition
-            this.r = r; this.T = T;
+            this.r = r; 
             this.K = K; this.kappaStar = kappaStar; this.thetaStar = thetaStar;
             this.sigma = sigma; this.rho = rho; this.v = v; this.S = S;
         }
 
-        public EuropeanOptionsMC(double r, double T, double K, double[] paramss, double S)
+        public EuropeanOptionsMC(double r, double K, double[] paramss, double S)
         {
-            this.r = r; this.T = T;
+            this.r = r; 
             this.K = K; kappaStar = paramss[kappaIndex]; thetaStar = paramss[thetaIndex];
             sigma = paramss[sigmaIndex]; rho = paramss[rhoIndex]; v = paramss[vIndex]; this.S = S;
             if (2 * kappaStar * thetaStar <= sigma * sigma)
@@ -50,13 +50,12 @@ namespace HestonClasses
             }
         }
 
-        public double EuropeanCallOptionPriceMC(int N, int numberPaths)
+        public double EuropeanCallOptionPriceMC(double T, int N, int numberPaths)
         {
             double count = 0;
             MCPaths path = new MCPaths(r, N, kappaStar, thetaStar, sigma, rho, v);
             for (int i = 0; i < numberPaths; i++)
-            {
-                //count += Math.Exp(-r * T) * Math.Max(path.EndOfPath() - K, 0);
+            {                
                 count += Math.Exp(-r * T) * Math.Max(path.PathGenerator(T, S) - K, 0);
             }
             return count / numberPaths;
@@ -81,17 +80,17 @@ namespace HestonClasses
                 throw new System.ArgumentException("Last monitoring time must not be greater than the exercise time");
         }
 
-        public double PriceAsianCallMC(double[] T, double exerciseT, int numberPaths, int N) //Either do seperate or change class, atm must input T twice
+        public double PriceAsianCallMC(double[] T, double exerciseT, int numberPaths, int N) 
         {
             CheckAsianOptionInputs(T, exerciseT);
             int M = T.Length;
-            // double[,] s = new double[numberPaths, M]; // dont need to store could just use counter
+            
             double pathCounter = 0;
             for (int i = 0; i < numberPaths; i++)
             {
                 double priceCount = 0;
                 double holder = S;
-                double deltaT = T[0]; // this make sense? assume start point is 0. or we could make T[0] = 0
+                double deltaT = T[0]; 
                 MCPaths path = new MCPaths(r, N, kappaStar, thetaStar, sigma, rho, v); //may need variable N
                 for (int j = 0; j < M; j++)
                 {
