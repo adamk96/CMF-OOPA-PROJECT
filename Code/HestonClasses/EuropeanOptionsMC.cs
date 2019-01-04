@@ -33,7 +33,7 @@ namespace HestonClasses
             {
                 throw new System.ArgumentException("Feller condition violated.");
             }
-            //throw usual exceptions, Feller condition
+            //throw usual exceptions
             this.r = r; 
             this.K = K; this.kappaStar = kappaStar; this.thetaStar = thetaStar;
             this.sigma = sigma; this.rho = rho; this.v = v; this.S = S;
@@ -91,7 +91,7 @@ namespace HestonClasses
                 double priceCount = 0;
                 double holder = S;
                 double deltaT = T[0]; 
-                MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v); //may need variable N
+                MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v); 
                 for (int j = 0; j < M; j++)
                 {
                     if (j > 0)
@@ -112,7 +112,7 @@ namespace HestonClasses
 
 
             double deltaT = exerciseT / numberTimeStepsPerPath;
-            MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v); // think about N=1 here
+            MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v); 
             for (double i = 0; i < numberPaths; i++)
             {
                 double min = S;
