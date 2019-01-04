@@ -58,9 +58,9 @@ namespace HestonClasses
         }
 
         // add in accuracy option
-        public Calibrator(double r, double S, int maxIts)
+        public Calibrator(double r, double S, int maxIts, double accuracy)
         {
-            accuracy = defaultAccuracy;
+            this.accuracy = accuracy;
             this.maxIts = maxIts;
             marketList = new List<MarketData>();
             this.r = r;
