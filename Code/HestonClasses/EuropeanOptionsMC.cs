@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace HestonClasses
 {
@@ -56,9 +57,23 @@ namespace HestonClasses
             MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
             for (int i = 0; i < numberPaths; i++)
             {                
-                count += Math.Exp(-r * T) * Math.Max(path.PathGenerator(T, S, numberTimeStepsPerPath) - K, 0);
+                count += Math.Max(path.PathGenerator(T, S, numberTimeStepsPerPath) - K, 0);
             }
-            return count / numberPaths;
+            return Math.Exp(-r * T) * count / numberPaths;
+        }
+
+        public double EuropeanCallOptionPriceMCParallel(double T, int numberTimeStepsPerPath, int numberPaths)
+        {
+            double count = 0;
+            MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
+
+            Parallel.For(0, numberPaths, (i) =>
+            {
+                double pathAdd = Math.Max(path.PathGenerator(T, S, numberTimeStepsPerPath) - K, 0);
+                Interlocked.Exchange(ref count, count + pathAdd);
+            });
+
+            return Math.Exp(-r * T) * count / numberPaths;
         }
 
         //maybe do seperate class for
@@ -84,14 +99,14 @@ namespace HestonClasses
         {
             CheckAsianOptionInputs(T, exerciseT);
             int M = T.Length;
-            
+            MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
             double pathCounter = 0;
             for (int i = 0; i < numberPaths; i++)
             {
                 double priceCount = 0;
                 double holder = S;
                 double deltaT = T[0]; 
-                MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v); 
+                
                 for (int j = 0; j < M; j++)
                 {
                     if (j > 0)
@@ -103,6 +118,32 @@ namespace HestonClasses
                 double pathPayoff = Math.Max(priceCount / M - K, 0);
                 pathCounter += pathPayoff;
             }
+            return Math.Exp(-r * exerciseT) * (pathCounter / numberPaths);
+        }
+
+        public double PriceAsianCallMCParallel(double[] T, double exerciseT, int numberPaths, int numberTimeStepsPerPath) //Either do seperate or change class, atm must input T twice
+        {
+            CheckAsianOptionInputs(T, exerciseT);
+            int M = T.Length;
+            double pathCounter = 0;
+            MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);  //could replace N, now 1, by 365*deltaT
+
+            Parallel.For(0, numberPaths, (i) =>
+            {
+                double priceCount = 0;
+                double holder = S;
+                double deltaT = T[0];
+                Parallel.For(0, M, (j) =>
+                {
+                    if (j > 0)
+                        deltaT = T[j] - T[j - 1];
+                    int stepNumber = (int)Math.Ceiling(deltaT * numberTimeStepsPerPath / exerciseT);
+                    holder = path.PathGenerator(deltaT, holder, stepNumber);
+                    Interlocked.Exchange(ref priceCount, priceCount + holder);
+                });
+                double pathPayoff = Math.Max((priceCount / M) - K, 0);
+                Interlocked.Exchange(ref pathCounter, pathCounter + pathPayoff);
+            });
             return Math.Exp(-r * exerciseT) * (pathCounter / numberPaths);
         }
 
