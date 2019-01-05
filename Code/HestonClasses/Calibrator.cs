@@ -57,7 +57,6 @@ namespace HestonClasses
             // may need initialise calibratedParams 
         }
 
-        // add in accuracy option
         public Calibrator(double r, double S, int maxIts, double accuracy)
         {
             this.accuracy = accuracy;
@@ -69,7 +68,7 @@ namespace HestonClasses
 
         public void SetGuessParameters(double kappaStar, double thetaStar, double sigma, double rho, double v)
         {
-            EuropeanOptions e = new EuropeanOptions(r, S, kappaStar, thetaStar, sigma, rho, v);
+            Options e = new Options(r, S, kappaStar, thetaStar, sigma, rho, v);
             calibratedParams = e.ParamsAsArray();
         }
 
@@ -82,7 +81,7 @@ namespace HestonClasses
             marketList.Add(observedOption);
         }
 
-        public double CalculateMeanSquaredErrorBetweenModelAndMarket(EuropeanOptions options)
+        public double CalculateMeanSquaredErrorBetweenModelAndMarket(Options options)
         {
             double mse = 0;
             foreach (MarketData data in marketList)
@@ -98,7 +97,7 @@ namespace HestonClasses
 
         public void CalibrationObjectiveFunction(double[] paramsarray, ref double func, object obj)
         {
-            EuropeanOptions european = new EuropeanOptions(r, S, paramsarray);
+            Options european = new Options(r, S, paramsarray);
             func = CalculateMeanSquaredErrorBetweenModelAndMarket(european);
         }
 
@@ -106,13 +105,13 @@ namespace HestonClasses
         {
             outcome = CalibrationOutcome.NotStarted;
 
-            double[] initialParams = new double[EuropeanOptions.numberParams];
+            double[] initialParams = new double[Options.numberParams];
             calibratedParams.CopyTo(initialParams, 0);  
             double epsg = accuracy;
             double epsf = accuracy; 
             double epsx = accuracy;
             double diffstep = 1.0e-6;
-            int maxits = maxIts; //why do
+            int maxits = maxIts; 
             double stpmax = 0.05;
 
 
@@ -123,9 +122,8 @@ namespace HestonClasses
             alglib.minlbfgssetcond(state, epsg, epsf, epsx, maxits);
             alglib.minlbfgssetstpmax(state, stpmax);
 
-            // this will do the work
             alglib.minlbfgsoptimize(state, CalibrationObjectiveFunction, null, null);
-            double[] resultParams = new double[EuropeanOptions.numberParams];
+            double[] resultParams = new double[Options.numberParams];
             alglib.minlbfgsresults(state, out resultParams, out rep);
 
             System.Console.WriteLine("Termination type: {0}", rep.terminationtype);
@@ -155,13 +153,13 @@ namespace HestonClasses
         public void GetCalibrationStatus(ref CalibrationOutcome calibOutcome, ref double pricingError)
         {
             calibOutcome = outcome;
-            EuropeanOptions m = new EuropeanOptions(r, S, calibratedParams);
+            Options m = new Options(r, S, calibratedParams);
             pricingError = CalculateMeanSquaredErrorBetweenModelAndMarket(m);
         }
 
-        public EuropeanOptions GetCalibratedModel()
+        public Options GetCalibratedModel()
         {
-            EuropeanOptions m = new EuropeanOptions(r, S, calibratedParams);
+            Options m = new Options(r, S, calibratedParams);
             return m;
         }
 

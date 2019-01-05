@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HestonClasses
 {
-    public class EuropeanOptions
+    public class Options
     {
         public const int numberParams = 5;
         private const int kappaIndex = 0;
@@ -28,13 +28,13 @@ namespace HestonClasses
         private double S;
         
 
-        public EuropeanOptions(double r, double S, double kappaStar, double thetaStar, double sigma, double rho, double v)
+        public Options(double r, double S, double kappaStar, double thetaStar, double sigma, double rho, double v)
         {
             this.r = r; this.S = S; this.kappaStar = kappaStar; this.thetaStar = thetaStar;
             this.sigma = sigma; this.rho = rho; this.v = v;
         }
 
-        public EuropeanOptions(double r, double S, double[] parameters)
+        public Options(double r, double S, double[] parameters)
         {
             this.r = r; this.S = S;
             kappaStar = parameters[kappaIndex];
@@ -84,7 +84,7 @@ namespace HestonClasses
 
         public double[] ParamsAsArray()
         {
-            double[] paramsArray = new double[EuropeanOptions.numberParams];
+            double[] paramsArray = new double[Options.numberParams];
             paramsArray[kappaIndex] = kappaStar;
             paramsArray[thetaIndex] = thetaStar;
             paramsArray[sigmaIndex] = sigma;

@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace HestonClasses
 {
-    public class EuropeanOptionsMC
+    public class OptionsMC
     {
         // again params class better
         //public const int numberParams = 5;
@@ -28,7 +28,7 @@ namespace HestonClasses
         private double v;
         private double S;
 
-        public EuropeanOptionsMC(double r, double K, double kappaStar, double thetaStar, double sigma, double rho, double v, double S)
+        public OptionsMC(double r, double K, double kappaStar, double thetaStar, double sigma, double rho, double v, double S)
         {
             if (2 * kappaStar * thetaStar <= sigma * sigma) 
             {
@@ -40,7 +40,7 @@ namespace HestonClasses
             this.sigma = sigma; this.rho = rho; this.v = v; this.S = S;
         }
 
-        public EuropeanOptionsMC(double r, double K, double[] paramss, double S)
+        public OptionsMC(double r, double K, double[] paramss, double S)
         {
             this.r = r; 
             this.K = K; kappaStar = paramss[kappaIndex]; thetaStar = paramss[thetaIndex];
@@ -76,7 +76,7 @@ namespace HestonClasses
             return Math.Exp(-r * T) * count / numberPaths;
         }
 
-        //maybe do seperate class for
+        
         private void CheckAsianOptionInputs(double[] T, double exerciseT)
         {
             if (T.Length == 0)

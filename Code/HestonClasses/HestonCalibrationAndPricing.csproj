@@ -52,8 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calibrator.cs" />
-    <Compile Include="EuropeanOptions.cs" />
-    <Compile Include="EuropeanOptionsMC.cs" />
+    <Compile Include="Options.cs" />
+    <Compile Include="OptionsMC.cs" />
     <Compile Include="MCPaths.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
