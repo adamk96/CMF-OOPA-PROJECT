@@ -23,7 +23,7 @@ namespace HestonModel.InterfaceImplement
             double[] TT = { 0 };
             InterfaceFill fill = new InterfaceFill(T, kappa, theta, sigma, rho, v, numberTrials, numberTimeSteps, 0, TT, 100, 0);
             paramss = fill;
-            this.c = c;
+            this.c = c; this.error = error;
         }
 
         double IHestonModelParameters.InitialStockPrice => S;

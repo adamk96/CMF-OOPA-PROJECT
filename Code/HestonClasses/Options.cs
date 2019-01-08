@@ -72,8 +72,9 @@ namespace HestonCalibrationAndPricing
 
             double[] P = new double[2];
             
-            P[0] = 0.5 + (1.0 / Math.PI) * SimpsonRule.IntegrateComposite(x => RealP(0, x), 0.000001, 5000, 10000);
-            P[1] = 0.5 + (1.0 / Math.PI) * SimpsonRule.IntegrateComposite(x => RealP(1, x), 0.000001, 5000, 10000);
+            //decide on these
+            P[0] = 0.5 + (1.0 / Math.PI) * SimpsonRule.IntegrateComposite(x => RealP(0, x), 0.000001, 50, 100);
+            P[1] = 0.5 + (1.0 / Math.PI) * SimpsonRule.IntegrateComposite(x => RealP(1, x), 0.000001, 50, 100);
             return S * P[0] - K * Math.Exp(-r * T) * P[1];
         }
 

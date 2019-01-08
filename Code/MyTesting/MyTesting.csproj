@@ -4,15 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BF166922-F23F-4DB2-BDCF-493074623730}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>HestonClasses</RootNamespace>
-    <AssemblyName>HestonClasses</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <ProjectGuid>{64115C60-85F6-4A2B-8DAC-424CFA69CCDC}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MyTesting</RootNamespace>
+    <AssemblyName>MyTesting</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,17 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MathNet.Numerics, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MathNet.Numerics.4.7.0\lib\net40\MathNet.Numerics.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,20 +43,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Calibrator.cs" />
-    <Compile Include="Options.cs" />
-    <Compile Include="OptionsMC.cs" />
-    <Compile Include="MCPaths.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AlglibCSharpLib\AlglibCSharpLib.csproj">
-      <Project>{13d4ee49-7122-4a45-b4a4-fcf70af15a3b}</Project>
-      <Name>AlglibCSharpLib</Name>
+    <ProjectReference Include="..\HestonClasses\HestonCalibrationAndPricing.csproj">
+      <Project>{bf166922-f23f-4db2-bdcf-493074623730}</Project>
+      <Name>HestonCalibrationAndPricing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HestonModel\HestonModel.csproj">
+      <Project>{f71ade90-705b-4ba1-9144-097a65a45371}</Project>
+      <Name>HestonModel</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
