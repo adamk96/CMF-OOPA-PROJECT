@@ -61,7 +61,12 @@ namespace HestonModel
                parameters.VarianceParameters.Kappa, parameters.VarianceParameters.Theta, parameters.VarianceParameters.Sigma,
                parameters.VarianceParameters.Rho, parameters.VarianceParameters.V0);
 
-            return eur.EuropeanCallPrice(europeanOption.Maturity, europeanOption.StrikePrice);
+            if (europeanOption.Type == 0)
+            {
+                return eur.EuropeanCallPrice(europeanOption.Maturity, europeanOption.StrikePrice);
+            }
+            else
+                return eur.EuropeanPutPrice(europeanOption.Maturity, europeanOption.StrikePrice);
         }
 
         /// <summary>
