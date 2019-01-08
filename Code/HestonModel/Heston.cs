@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using HestonModel.Interfaces;
+using HestonCalibrationAndPricing;
+using System.Linq;
+
 
 namespace HestonModel
 {
@@ -34,7 +37,11 @@ namespace HestonModel
         /// <returns>Option price</returns>
         public static double HestonEuropeanOptionPrice(IHestonModelParameters parameters, IEuropeanOption europeanOption)
         {
-            throw new NotImplementedException();
+            Options eur = new Options(parameters.RiskFreeRate, parameters.InitialStockPrice,
+               parameters.VarianceParameters.Kappa, parameters.VarianceParameters.Theta, parameters.VarianceParameters.Sigma,
+               parameters.VarianceParameters.Rho, parameters.VarianceParameters.V0);
+
+            return eur.EuropeanCallPrice(europeanOption.Maturity, europeanOption.StrikePrice);
         }
 
         /// <summary>
@@ -46,7 +53,11 @@ namespace HestonModel
         /// <returns>Option price</returns>
         public static double HestonEuropeanOptionPriceMC(IHestonModelParameters parameters, IEuropeanOption europeanOption, IMonteCarloSettings monteCarloSimulationSettings)
         {
-            throw new NotImplementedException();
+            OptionsMC option = new OptionsMC(parameters.RiskFreeRate, europeanOption.StrikePrice, parameters.VarianceParameters.Kappa,
+                parameters.VarianceParameters.Theta, parameters.VarianceParameters.Sigma, parameters.VarianceParameters.Rho,
+                parameters.VarianceParameters.V0, parameters.InitialStockPrice);
+
+            return option.EuropeanCallOptionPriceMCParallel(europeanOption.Maturity, monteCarloSimulationSettings.NumberOfTimeSteps, monteCarloSimulationSettings.NumberOfTrials);
         }
 
         /// <summary>
@@ -58,7 +69,12 @@ namespace HestonModel
         /// <returns>Option price</returns>
         public static double HestonAsianOptionPriceMC(IHestonModelParameters parameters, IAsianOption asianOption, IMonteCarloSettings monteCarloSimulationSettings)
         {
-            throw new NotImplementedException();
+            OptionsMC asian = new OptionsMC(parameters.RiskFreeRate, asianOption.StrikePrice, parameters.VarianceParameters.Kappa,
+               parameters.VarianceParameters.Theta, parameters.VarianceParameters.Sigma, parameters.VarianceParameters.Rho,
+               parameters.VarianceParameters.V0, parameters.InitialStockPrice);
+
+            return asian.PriceAsianCallMCParallel(asianOption.MonitoringTimes.ToArray(), asianOption.Maturity,
+                monteCarloSimulationSettings.NumberOfTrials, monteCarloSimulationSettings.NumberOfTimeSteps);
         }
 
         /// <summary>
@@ -70,7 +86,11 @@ namespace HestonModel
         /// <returns>Option price</returns>
         public static double HestonLookbackOptionPriceMC(IHestonModelParameters parameters, IOption maturity, IMonteCarloSettings monteCarloSimulationSettings)
         {
-            throw new NotImplementedException();
+            OptionsMC lookback = new OptionsMC(parameters.RiskFreeRate, parameters.VarianceParameters.Kappa,
+                parameters.VarianceParameters.Theta, parameters.VarianceParameters.Sigma, parameters.VarianceParameters.Rho,
+                parameters.VarianceParameters.V0, parameters.InitialStockPrice);
+
+            return lookback.PriceLookbackCallMC(maturity.Maturity, monteCarloSimulationSettings.NumberOfTrials, monteCarloSimulationSettings.NumberOfTimeSteps);
         }       
     }
 }

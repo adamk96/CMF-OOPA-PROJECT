@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HestonClasses
+namespace HestonCalibrationAndPricing
 {
     public class Options
     {

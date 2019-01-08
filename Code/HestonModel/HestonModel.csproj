@@ -74,6 +74,10 @@
       <Project>{13D4EE49-7122-4A45-B4A4-FCF70AF15A3B}</Project>
       <Name>AlglibCSharpLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HestonClasses\HestonCalibrationAndPricing.csproj">
+      <Project>{bf166922-f23f-4db2-bdcf-493074623730}</Project>
+      <Name>HestonCalibrationAndPricing</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

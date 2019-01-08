@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace HestonClasses
+namespace HestonCalibrationAndPricing
 {
     public class OptionsMC
     {
@@ -37,6 +37,18 @@ namespace HestonClasses
             //throw usual exceptions
             this.r = r; 
             this.K = K; this.kappaStar = kappaStar; this.thetaStar = thetaStar;
+            this.sigma = sigma; this.rho = rho; this.v = v; this.S = S;
+        }
+
+        public OptionsMC(double r, double kappaStar, double thetaStar, double sigma, double rho, double v, double S)
+        {
+            if (2 * kappaStar * thetaStar <= sigma * sigma)
+            {
+                throw new System.ArgumentException("Feller condition violated.");
+            }
+            //throw usual exceptions
+            this.r = r;
+            this.kappaStar = kappaStar; this.thetaStar = thetaStar;
             this.sigma = sigma; this.rho = rho; this.v = v; this.S = S;
         }
 
