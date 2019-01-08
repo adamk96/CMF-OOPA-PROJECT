@@ -12,11 +12,11 @@ namespace HestonCalibrationAndPricing
     {
         // again params class better
         //public const int numberParams = 5;
-        private const int kappaIndex = 0;
-        private const int thetaIndex = 1;
-        private const int sigmaIndex = 2;
-        private const int rhoIndex = 3;
-        private const int vIndex = 4;
+        public const int kappaIndex = 0;
+        public const int thetaIndex = 1;
+        public const int sigmaIndex = 2;
+        public const int rhoIndex = 3;
+        public const int vIndex = 4;
 
         private double r;
        // private double T;

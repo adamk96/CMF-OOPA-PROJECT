@@ -49,6 +49,10 @@
   <ItemGroup>
     <Compile Include="Enums\CalibrationOutcome.cs" />
     <Compile Include="Heston.cs" />
+    <Compile Include="InterfaceImplement\AnotherInterfaceFill.cs" />
+    <Compile Include="InterfaceImplement\FinalInterfaceFill.cs" />
+    <Compile Include="InterfaceImplement\InterfaceFill.cs" />
+    <Compile Include="InterfaceImplement\OtherInterfaceFill.cs" />
     <Compile Include="Interfaces\IAsianOption.cs" />
     <Compile Include="Interfaces\ICalibrationResult.cs" />
     <Compile Include="Interfaces\ICalibrationSettings.cs" />

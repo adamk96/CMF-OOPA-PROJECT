@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using HestonModel.Interfaces;
 using HestonCalibrationAndPricing;
 using System.Linq;
-
+using HestonModel.InterfaceImplement;
 
 namespace HestonModel
 {
@@ -26,7 +26,27 @@ namespace HestonModel
         /// <returns>Object implementing IHestonCalibrationResult interface which contains calibrated model parameters and additional diagnostic information</returns>
         public static IHestonCalibrationResult CalibrateHestonParameters(IHestonModelParameters guessModelParameters, IEnumerable<IOptionMarketData<IEuropeanOption>> referenceData, ICalibrationSettings calibrationSettings)
         {
-            throw new NotImplementedException();
+            Calibrator cal = new Calibrator(guessModelParameters.RiskFreeRate, guessModelParameters.InitialStockPrice, calibrationSettings.MaximumNumberOfIterations, calibrationSettings.Accuracy);
+            cal.SetGuessParameters(guessModelParameters.VarianceParameters.Kappa, guessModelParameters.VarianceParameters.Theta,
+                guessModelParameters.VarianceParameters.Sigma, guessModelParameters.VarianceParameters.Rho, guessModelParameters.VarianceParameters.V0);
+
+            foreach (IOptionMarketData<IEuropeanOption> data in referenceData)
+            {
+                cal.AddObservedOption(data.Option.StrikePrice, data.Option.Maturity, data.Price);
+            }
+
+            cal.Calibrate();
+            double error = 0;
+            HestonCalibrationAndPricing.CalibrationOutcome outcome = HestonCalibrationAndPricing.CalibrationOutcome.NotStarted;
+            cal.GetCalibrationStatus(ref outcome, ref error);
+           
+            Options e = cal.GetCalibratedModel();
+            double[] paramArray = e.ParamsAsArray();
+            CalibrationOutcome outcome1 = (CalibrationOutcome)outcome;
+
+            //maybe do another constructor without 0s.
+            AnotherInterfaceFill fill = new AnotherInterfaceFill(0, paramArray[Options.kappaIndex], paramArray[Options.thetaIndex], paramArray[Options.sigmaIndex], paramArray[Options.rhoIndex], paramArray[Options.vIndex], 0, 0, 0, 0, outcome1, error);
+            return fill;
         }
 
         /// <summary>
@@ -87,8 +107,8 @@ namespace HestonModel
         public static double HestonLookbackOptionPriceMC(IHestonModelParameters parameters, IOption maturity, IMonteCarloSettings monteCarloSimulationSettings)
         {
             OptionsMC lookback = new OptionsMC(parameters.RiskFreeRate, parameters.VarianceParameters.Kappa,
-                parameters.VarianceParameters.Theta, parameters.VarianceParameters.Sigma, parameters.VarianceParameters.Rho,
-                parameters.VarianceParameters.V0, parameters.InitialStockPrice);
+                            parameters.VarianceParameters.Theta, parameters.VarianceParameters.Sigma, parameters.VarianceParameters.Rho,
+                            parameters.VarianceParameters.V0, parameters.InitialStockPrice);
 
             return lookback.PriceLookbackCallMC(maturity.Maturity, monteCarloSimulationSettings.NumberOfTrials, monteCarloSimulationSettings.NumberOfTimeSteps);
         }       
