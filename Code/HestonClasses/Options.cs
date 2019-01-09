@@ -30,6 +30,10 @@ namespace HestonCalibrationAndPricing
 
         public Options(double r, double S, double kappaStar, double thetaStar, double sigma, double rho, double v)
         {
+            if (r <= 0 || S <= 0 || sigma <= 0)                 //check what other params need be positive
+            {
+                throw new System.ArgumentException("r, S, sigma must be positive");
+            }
             this.r = r; this.S = S; this.kappaStar = kappaStar; this.thetaStar = thetaStar;
             this.sigma = sigma; this.rho = rho; this.v = v;
         }
@@ -40,14 +44,21 @@ namespace HestonCalibrationAndPricing
             kappaStar = parameters[kappaIndex];
             thetaStar = parameters[thetaIndex];
             sigma = parameters[sigmaIndex];
+            if (r <= 0 || S <= 0 || sigma <= 0)                 //check what other params need be positive
+            {
+                throw new System.ArgumentException("r, S, sigma must be positive");
+            }
             rho = parameters[rhoIndex];
             v = parameters[vIndex];
         }
 
-        //think will need to move T,K into this for calib
         public double EuropeanCallPrice(double T, double K)
         {
-            //might be doing too much in here
+            if (T < 0 || K < 0)
+            {
+                throw new System.ArgumentException("T, K must be non-negative");
+            }
+
             double[] b = { kappaStar - rho * sigma, kappaStar };
             double[] u = { 0.5, -0.5 };
 
@@ -80,6 +91,10 @@ namespace HestonCalibrationAndPricing
 
         public double EuropeanPutPrice(double T, double K)
         {
+            if (T < 0 || K < 0)
+            {
+                throw new System.ArgumentException("T, K must be non-negative");
+            }
             return EuropeanCallPrice(T, K) - S + K * Math.Exp(-r * T);
         }
 

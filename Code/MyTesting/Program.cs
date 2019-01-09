@@ -14,8 +14,8 @@ namespace MyTesting
     {
         static void Main(string[] args)
         {
-          
-            Calibrator calibrator = new Calibrator(0.025, 100, 1000, 1 / 1000);
+            Console.WriteLine(1.0 / 1000 <= 0);
+            Calibrator calibrator = new Calibrator(0.025, 100, 1000, 1.0 / 10000000000000);
             calibrator.SetGuessParameters(1.5768, 0.0398, 0.5751, -0.5711, 0.0175);
 
             calibrator.AddObservedOption(80, 1, 25.72);

@@ -34,7 +34,12 @@ namespace HestonCalibrationAndPricing
             {
                 throw new System.ArgumentException("Feller condition violated.");
             }
-            //throw usual exceptions
+
+            if (r <= 0 || K <= 0 || sigma <= 0 || S <= 0)
+            {
+                throw new System.ArgumentException("r, K, sigma, S must be positive");
+            }
+                    
             this.r = r; 
             this.K = K; this.kappaStar = kappaStar; this.thetaStar = thetaStar;
             this.sigma = sigma; this.rho = rho; this.v = v; this.S = S;
@@ -46,7 +51,10 @@ namespace HestonCalibrationAndPricing
             {
                 throw new System.ArgumentException("Feller condition violated.");
             }
-            //throw usual exceptions
+            if (r <= 0 || K <= 0 || sigma <= 0 || S <= 0)
+            {
+                throw new System.ArgumentException("r, K, sigma, S must be positive");
+            }
             this.r = r;
             this.kappaStar = kappaStar; this.thetaStar = thetaStar;
             this.sigma = sigma; this.rho = rho; this.v = v; this.S = S;
@@ -61,10 +69,19 @@ namespace HestonCalibrationAndPricing
             {
                 throw new System.ArgumentException("Feller condition violated.");
             }
+            if (r <= 0 || K <= 0 || sigma <= 0 || S <= 0)
+            {
+                throw new System.ArgumentException("r, K, sigma, S must be positive");
+            }
         }
 
         public double EuropeanCallOptionPriceMC(double T, int numberTimeStepsPerPath, int numberPaths)
         {
+            if (T <= 0 || numberTimeStepsPerPath <= 0 || numberPaths <= 0)
+            {
+                throw new System.ArgumentException("Parameters must be positive");
+            }
+
             double count = 0;
             MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
             for (int i = 0; i < numberPaths; i++)
@@ -76,6 +93,11 @@ namespace HestonCalibrationAndPricing
 
         public double EuropeanCallOptionPriceMCParallel(double T, int numberTimeStepsPerPath, int numberPaths)
         {
+            if (T <= 0 || numberTimeStepsPerPath <= 0 || numberPaths <= 0)
+            {
+                throw new System.ArgumentException("Parameters must be positive");
+            }
+
             double count = 0;
             MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
 
@@ -88,7 +110,22 @@ namespace HestonCalibrationAndPricing
             return Math.Exp(-r * T) * count / numberPaths;
         }
 
-        
+        public double EuropeanCallOptionPriceMCAnithetic(double T, int numberTimeStepsPerPath, int numberPaths)
+        {
+            if (T <= 0 || numberTimeStepsPerPath <= 0 || numberPaths <= 0)
+            {
+                throw new System.ArgumentException("Parameters must be positive");
+            }
+
+            double count = 0;
+            MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
+            for (int i = 0; i < numberPaths; i++)
+            {
+                count += Math.Max(path.PathGeneratorAnithetic(T, S, numberTimeStepsPerPath)[0] - K, 0) + Math.Max(path.PathGeneratorAnithetic(T, S, numberTimeStepsPerPath)[1] - K, 0);
+            }
+            return Math.Exp(-r * T) * count / (2 * numberPaths);
+        }
+
         private void CheckAsianOptionInputs(double[] T, double exerciseT)
         {
             if (T.Length == 0)
@@ -109,6 +146,10 @@ namespace HestonCalibrationAndPricing
 
         public double PriceAsianCallMC(double[] T, double exerciseT, int numberPaths, int numberTimeStepsPerPath) 
         {
+            if (numberTimeStepsPerPath <= 0 || numberPaths <= 0)
+            {
+                throw new System.ArgumentException("Monte Carlo settings must be positive");
+            }
             CheckAsianOptionInputs(T, exerciseT);
             int M = T.Length;
             MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
@@ -133,12 +174,17 @@ namespace HestonCalibrationAndPricing
             return Math.Exp(-r * exerciseT) * (pathCounter / numberPaths);
         }
 
-        public double PriceAsianCallMCParallel(double[] T, double exerciseT, int numberPaths, int numberTimeStepsPerPath) //Either do seperate or change class, atm must input T twice
+        public double PriceAsianCallMCParallel(double[] T, double exerciseT, int numberPaths, int numberTimeStepsPerPath) 
         {
+            if (numberTimeStepsPerPath <= 0 || numberPaths <= 0)
+            {
+                throw new System.ArgumentException("Monte Carlo settings must be positive");
+            }
+
             CheckAsianOptionInputs(T, exerciseT);
             int M = T.Length;
             double pathCounter = 0;
-            MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);  //could replace N, now 1, by 365*deltaT
+            MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);  
 
             Parallel.For(0, numberPaths, (i) =>
             {
@@ -161,11 +207,15 @@ namespace HestonCalibrationAndPricing
 
         public double PriceLookbackCallMC(double exerciseT, int numberPaths, int numberTimeStepsPerPath)
         {
+            if(exerciseT <= 0 || numberPaths <=0 || numberTimeStepsPerPath <= 0)
+            {
+                throw new System.ArgumentException("Parameters must be positive");
+            }
+
             double pathCounter = 0;
-
-
             double deltaT = exerciseT / numberTimeStepsPerPath;
             MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v); 
+
             for (double i = 0; i < numberPaths; i++)
             {
                 double min = S;

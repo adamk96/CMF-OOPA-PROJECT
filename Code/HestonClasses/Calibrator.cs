@@ -55,11 +55,15 @@ namespace HestonCalibrationAndPricing
             marketList = new List<MarketData>();
             r = 0;
             S = 0;
-            // may need initialise calibratedParams 
         }
 
         public Calibrator(double r, double S, int maxIts, double accuracy)
         {
+            if (r <= 0 || S <= 0 || maxIts <= 0 ) 
+            {
+                throw new System.ArgumentException("Parameters must be positive");
+            }
+
             this.accuracy = accuracy;
             this.maxIts = maxIts;
             marketList = new List<MarketData>();
@@ -69,12 +73,22 @@ namespace HestonCalibrationAndPricing
 
         public void SetGuessParameters(double kappaStar, double thetaStar, double sigma, double rho, double v)
         {
+            if (sigma <= 0)
+            {
+                throw new System.ArgumentException("Sigma must be positive");
+            }
+
             Options e = new Options(r, S, kappaStar, thetaStar, sigma, rho, v);
             calibratedParams = e.ParamsAsArray();
         }
 
         public void AddObservedOption(double K, double T, double Price)
         {
+            if (K <= 0 || T <= 0 || Price <= 0)
+            {
+                throw new System.ArgumentException("Parameters must be positive");
+            }
+
             MarketData observedOption;
             observedOption.K = K;
             observedOption.T = T;
@@ -107,6 +121,10 @@ namespace HestonCalibrationAndPricing
             outcome = CalibrationOutcome.NotStarted;
 
             double[] initialParams = new double[Options.numberParams];
+            if (calibratedParams == null)
+            {
+                throw new System.Exception("Please add an initial guess for parameters");
+            }
             calibratedParams.CopyTo(initialParams, 0);  
             double epsg = accuracy;
             double epsf = accuracy; 
