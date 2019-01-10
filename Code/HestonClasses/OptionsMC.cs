@@ -105,7 +105,7 @@ namespace HestonCalibrationAndPricing
          /// <param name = "numberTimeStepsPerPath">The number of steps we wish our path generator to take to reach time T.</param>
          /// <param name = "numberPaths">The number of simulations we wish to run.</param>
          /// <returns>Option price.</returns>
-        public double EuropeanCallOptionPriceMC(double T, int numberTimeStepsPerPath, int numberPaths)
+        public double EuropeanPutOptionPriceMC(double T, int numberTimeStepsPerPath, int numberPaths)
         {
             if (T <= 0 || numberTimeStepsPerPath <= 0 || numberPaths <= 0)
             {
@@ -171,7 +171,7 @@ namespace HestonCalibrationAndPricing
         }
 
          /// <summary>
-         /// Checks that the times used for pricing Asian call options make sense.
+         /// Checks that the times used for pricing Asian options make sense.
          /// </summary>
          /// <param name = "T">An array containing the onservation times of the Asian option.</param>
          /// <param name = "exerciseT">The Asian option's exercise time.</param>

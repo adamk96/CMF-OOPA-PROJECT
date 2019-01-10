@@ -90,8 +90,11 @@ namespace HestonCalibrationAndPricing
         }
 
         /// <summary>
-        /// Adds the details of a real world option to the list marketList of data which will be used for calibration
+        /// Adds the details of a real world option to the list marketList of data which will be used for calibration.
         /// </summary>
+        /// <param name="K">Observed option's strike price.</param>
+        /// <param name="T">Observed option's maturity time.</param>
+        /// <param name="Price">Observed options price.</param>
         public void AddObservedOption(double K, double T, double Price)
         {
             if (K <= 0 || T <= 0 || Price <= 0)
@@ -109,7 +112,8 @@ namespace HestonCalibrationAndPricing
         /// <summary>
         /// Calculates the mean squared error between the European call prices of an instance, options,
         /// of the class Options and the market prices found in marketList
-        /// <\summary>
+        /// </summary>
+        /// <param name="options">An instance of the class Options.</param>
         public double CalculateMeanSquaredErrorBetweenModelAndMarket(Options options)
         {
             double mse = 0;
@@ -190,7 +194,7 @@ namespace HestonCalibrationAndPricing
         }
 
          /// <summary>
-         /// Obtains the calibration status of the model, as well as the models pricing error
+         /// Obtains the calibration status of the model, as well as the models pricing error.
          /// </summary>
         public void GetCalibrationStatus(ref CalibrationOutcome calibOutcome, ref double pricingError)
         {
@@ -202,6 +206,7 @@ namespace HestonCalibrationAndPricing
          /// <summary>
          /// Creates an instance of the class Options with the calibrated parameters.
          /// </summary>
+         /// <returns>Calibrated model.</returns>
         public Options GetCalibratedModel()
         {
             Options m = new Options(r, S, calibratedParams);
