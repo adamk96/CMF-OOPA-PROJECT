@@ -81,8 +81,12 @@ namespace HestonModel
             OptionsMC option = new OptionsMC(parameters.RiskFreeRate, europeanOption.StrikePrice, parameters.VarianceParameters.Kappa,
                 parameters.VarianceParameters.Theta, parameters.VarianceParameters.Sigma, parameters.VarianceParameters.Rho,
                 parameters.VarianceParameters.V0, parameters.InitialStockPrice);
-
-            return option.EuropeanCallOptionPriceMCParallel(europeanOption.Maturity, monteCarloSimulationSettings.NumberOfTimeSteps, monteCarloSimulationSettings.NumberOfTrials);
+            if(europeanOption.Type == 0)
+            {
+                return option.EuropeanCallOptionPriceMC(europeanOption.Maturity, monteCarloSimulationSettings.NumberOfTimeSteps, monteCarloSimulationSettings.NumberOfTrials);
+            }
+            else
+                return option.EuropeanPutOptionPriceMC(europeanOption.Maturity, monteCarloSimulationSettings.NumberOfTimeSteps, monteCarloSimulationSettings.NumberOfTrials);
         }
 
         /// <summary>
@@ -98,7 +102,13 @@ namespace HestonModel
                parameters.VarianceParameters.Theta, parameters.VarianceParameters.Sigma, parameters.VarianceParameters.Rho,
                parameters.VarianceParameters.V0, parameters.InitialStockPrice);
 
-            return asian.PriceAsianCallMCParallel(asianOption.MonitoringTimes.ToArray(), asianOption.Maturity,
+            if (asianOption.Type == 0)
+            {
+                return asian.PriceAsianCallMC(asianOption.MonitoringTimes.ToArray(), asianOption.Maturity,
+                monteCarloSimulationSettings.NumberOfTrials, monteCarloSimulationSettings.NumberOfTimeSteps);
+            }
+            else
+                return asian.PriceAsianPutMC(asianOption.MonitoringTimes.ToArray(), asianOption.Maturity,
                 monteCarloSimulationSettings.NumberOfTrials, monteCarloSimulationSettings.NumberOfTimeSteps);
         }
 

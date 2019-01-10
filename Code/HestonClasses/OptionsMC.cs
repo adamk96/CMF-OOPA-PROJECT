@@ -8,10 +8,11 @@ using System.Threading;
 
 namespace HestonCalibrationAndPricing
 {
+    /// <summary>
+    /// This class prices options within the Heston model using Monte Carlo methods.
+    /// </summary>
     public class OptionsMC
     {
-        // again params class better
-        //public const int numberParams = 5;
         public const int kappaIndex = 0;
         public const int thetaIndex = 1;
         public const int sigmaIndex = 2;
@@ -19,7 +20,6 @@ namespace HestonCalibrationAndPricing
         public const int vIndex = 4;
 
         private double r;
-       // private double T;
         private double K;
         private double kappaStar;
         private double thetaStar;
@@ -75,6 +75,13 @@ namespace HestonCalibrationAndPricing
             }
         }
 
+         /// <summary>
+         /// Prices a European call option within the Heston model using Monte Carlo methods.
+         /// </summary>
+         /// <param name = "T">The maturity date of the option in years.</param>
+         /// <param name = "numberTimeStepsPerPath">The number of steps we wish our path generator to take to reach time T.</param>
+         /// <param name = "numberPaths">The number of simulations we wish to run.</param>
+         /// <returns>Option price.</returns>
         public double EuropeanCallOptionPriceMC(double T, int numberTimeStepsPerPath, int numberPaths)
         {
             if (T <= 0 || numberTimeStepsPerPath <= 0 || numberPaths <= 0)
@@ -91,6 +98,36 @@ namespace HestonCalibrationAndPricing
             return Math.Exp(-r * T) * count / numberPaths;
         }
 
+         /// <summary>
+         /// Prices a European put option within the Heston model using Monte Carlo methods.
+         /// </summary>
+         /// <param name = "T">The maturity date of the option in years.</param>
+         /// <param name = "numberTimeStepsPerPath">The number of steps we wish our path generator to take to reach time T.</param>
+         /// <param name = "numberPaths">The number of simulations we wish to run.</param>
+         /// <returns>Option price.</returns>
+        public double EuropeanCallOptionPriceMC(double T, int numberTimeStepsPerPath, int numberPaths)
+        {
+            if (T <= 0 || numberTimeStepsPerPath <= 0 || numberPaths <= 0)
+            {
+                throw new System.ArgumentException("Parameters must be positive");
+            }
+
+            double count = 0;
+            MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
+            for (int i = 0; i < numberPaths; i++)
+            {                
+                count += Math.Max(K - path.PathGenerator(T, S, numberTimeStepsPerPath), 0);
+            }
+            return Math.Exp(-r * T) * count / numberPaths;
+        }
+
+         /// <summary>
+         /// Prices a European call option within the Heston model using Monte Carlo methods with parallelisation.
+         /// </summary>
+         /// <param name = "T">The maturity date of the option in years.</param>
+         /// <param name = "numberTimeStepsPerPath">The number of steps we wish our path generator to take to reach time T.</param>
+         /// <param name = "numberPaths">The number of simulations we wish to run.</param>
+         /// <returns>Option price.</returns>
         public double EuropeanCallOptionPriceMCParallel(double T, int numberTimeStepsPerPath, int numberPaths)
         {
             if (T <= 0 || numberTimeStepsPerPath <= 0 || numberPaths <= 0)
@@ -110,6 +147,13 @@ namespace HestonCalibrationAndPricing
             return Math.Exp(-r * T) * count / numberPaths;
         }
 
+         /// <summary>
+         /// Prices a European call option within the Heston model using Monte Carlo methods using anithetic sampling .
+         /// </summary>
+         /// <param name = "T">The maturity date of the option in years.</param>
+         /// <param name = "numberTimeStepsPerPath">The number of steps we wish our path generator to take to reach time T.</param>
+         /// <param name = "numberPaths">The number of simulations we wish to run.</param>
+         /// <returns>Option price.</returns>
         public double EuropeanCallOptionPriceMCAnithetic(double T, int numberTimeStepsPerPath, int numberPaths)
         {
             if (T <= 0 || numberTimeStepsPerPath <= 0 || numberPaths <= 0)
@@ -126,6 +170,11 @@ namespace HestonCalibrationAndPricing
             return Math.Exp(-r * T) * count / (2 * numberPaths);
         }
 
+         /// <summary>
+         /// Checks that the times used for pricing Asian call options make sense.
+         /// </summary>
+         /// <param name = "T">An array containing the onservation times of the Asian option.</param>
+         /// <param name = "exerciseT">The Asian option's exercise time.</param>
         private void CheckAsianOptionInputs(double[] T, double exerciseT)
         {
             if (T.Length == 0)
@@ -144,6 +193,14 @@ namespace HestonCalibrationAndPricing
                 throw new System.ArgumentException("Last monitoring time must not be greater than the exercise time");
         }
 
+         /// <summary>
+         /// Prices an Asian call option within the Heston model using Monte Carlo methods.
+         /// </summary>
+         /// <param name = "T">An array containing the onservation times of the Asian option.</param>
+         /// <param name = "exerciseT">The Asian option's exercise time.</param>
+         /// <param name = "numberPaths">The number of simulations we wish to run.</param>
+         /// <param name = "numberTimeStepsPerPath">The number of steps we wish our path generator to take to reach time exerciseT.</param>
+         /// <returns>Option price.</returns>
         public double PriceAsianCallMC(double[] T, double exerciseT, int numberPaths, int numberTimeStepsPerPath) 
         {
             if (numberTimeStepsPerPath <= 0 || numberPaths <= 0)
@@ -164,7 +221,7 @@ namespace HestonCalibrationAndPricing
                 {
                     if (j > 0)
                         deltaT = T[j] - T[j - 1];
-                    int stepNumber = (int)Math.Ceiling(deltaT * numberTimeStepsPerPath / exerciseT);
+                    int stepNumber = (int)Math.Ceiling(deltaT * numberTimeStepsPerPath / exerciseT); 
                     holder = path.PathGenerator(deltaT, holder, stepNumber);
                     priceCount += holder;
                 }
@@ -174,6 +231,52 @@ namespace HestonCalibrationAndPricing
             return Math.Exp(-r * exerciseT) * (pathCounter / numberPaths);
         }
 
+        /// <summary>
+         /// Prices an Asian put option within the Heston model using Monte Carlo methods.
+         /// </summary>
+         /// <param name = "T">An array containing the onservation times of the Asian option.</param>
+         /// <param name = "exerciseT">The Asian option's exercise time.</param>
+         /// <param name = "numberPaths">The number of simulations we wish to run.</param>
+         /// <param name = "numberTimeStepsPerPath">The number of steps we wish our path generator to take to reach time exerciseT.</param>
+         /// <returns>Option price.</returns>
+        public double PriceAsianPutMC(double[] T, double exerciseT, int numberPaths, int numberTimeStepsPerPath) 
+        {
+            if (numberTimeStepsPerPath <= 0 || numberPaths <= 0)
+            {
+                throw new System.ArgumentException("Monte Carlo settings must be positive");
+            }
+            CheckAsianOptionInputs(T, exerciseT);
+            int M = T.Length;
+            MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
+            double pathCounter = 0;
+            for (int i = 0; i < numberPaths; i++)
+            {
+                double priceCount = 0;
+                double holder = S;
+                double deltaT = T[0]; 
+                
+                for (int j = 0; j < M; j++)
+                {
+                    if (j > 0)
+                        deltaT = T[j] - T[j - 1];
+                    int stepNumber = (int)Math.Ceiling(deltaT * numberTimeStepsPerPath / exerciseT); 
+                    holder = path.PathGenerator(deltaT, holder, stepNumber);
+                    priceCount += holder;
+                }
+                double pathPayoff = Math.Max(K - priceCount / M, 0);
+                pathCounter += pathPayoff;
+            }
+            return Math.Exp(-r * exerciseT) * (pathCounter / numberPaths);
+        }
+
+         /// <summary>
+         /// Prices an Asian call option within the Heston model using Monte Carlo methods with parallelisation.
+         /// </summary>
+         /// <param name = "T">An array containing the onservation times of the Asian option.</param>
+         /// <param name = "exerciseT">The Asian option's exercise time.</param>
+         /// <param name = "numberPaths">The number of simulations we wish to run.</param>
+         /// <param name = "numberTimeStepsPerPath">The number of steps we wish our path generator to take to reach time exerciseT.</param>
+         /// <returns>Option price.</returns>
         public double PriceAsianCallMCParallel(double[] T, double exerciseT, int numberPaths, int numberTimeStepsPerPath) 
         {
             if (numberTimeStepsPerPath <= 0 || numberPaths <= 0)
@@ -204,7 +307,14 @@ namespace HestonCalibrationAndPricing
             });
             return Math.Exp(-r * exerciseT) * (pathCounter / numberPaths);
         }
-
+        
+         /// <summary>
+         /// Prices a Lookback option within the Heston model using Monte Carlo methods.
+         /// </summary>
+         /// <param name = "exerciseT">The Lookback option's exercise time.</param>
+         /// <param name = "numberPaths">The number of simulations we wish to run.</param>
+         /// <param name = "numberTimeStepsPerPath">The number of steps we wish our path generator to take to reach time exerciseT.</param>
+         /// <returns>Option price.</returns>
         public double PriceLookbackCallMC(double exerciseT, int numberPaths, int numberTimeStepsPerPath)
         {
             if(exerciseT <= 0 || numberPaths <=0 || numberTimeStepsPerPath <= 0)

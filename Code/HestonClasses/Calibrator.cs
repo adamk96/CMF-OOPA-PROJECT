@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace HestonCalibrationAndPricing
 {
+
     public class CalibrationFailedException : Exception
     {
         public CalibrationFailedException()
@@ -33,9 +34,12 @@ namespace HestonCalibrationAndPricing
         FailedOtherReason
     };
 
+    /// <summary>
+    /// This class is used to calibrate the parameters of the Heston Model to real world data
+    /// </summary>
     public class Calibrator
     {
-        private const double defaultAccuracy = 1/1000;
+        private const double defaultAccuracy = 1.0e-15;
         private const int defaultMaxIts = 1000;
         private double accuracy;
         private int maxIts;
@@ -71,6 +75,9 @@ namespace HestonCalibrationAndPricing
             this.S = S;
         }
 
+        /// <summary>
+        /// Sets the parameters which will be used as a starting point by the calibrator
+        /// </summary>
         public void SetGuessParameters(double kappaStar, double thetaStar, double sigma, double rho, double v)
         {
             if (sigma <= 0)
@@ -82,6 +89,9 @@ namespace HestonCalibrationAndPricing
             calibratedParams = e.ParamsAsArray();
         }
 
+        /// <summary>
+        /// Adds the details of a real world option to the list marketList of data which will be used for calibration
+        /// </summary>
         public void AddObservedOption(double K, double T, double Price)
         {
             if (K <= 0 || T <= 0 || Price <= 0)
@@ -96,6 +106,10 @@ namespace HestonCalibrationAndPricing
             marketList.Add(observedOption);
         }
 
+        /// <summary>
+        /// Calculates the mean squared error between the European call prices of an instance, options,
+        /// of the class Options and the market prices found in marketList
+        /// <\summary>
         public double CalculateMeanSquaredErrorBetweenModelAndMarket(Options options)
         {
             double mse = 0;
@@ -110,12 +124,18 @@ namespace HestonCalibrationAndPricing
             return mse;
         }
 
+         /// <summary>
+         /// This is the function which will be used by the calibrator
+         /// </summary>
         public void CalibrationObjectiveFunction(double[] paramsarray, ref double func, object obj)
         {
             Options european = new Options(r, S, paramsarray);
             func = CalculateMeanSquaredErrorBetweenModelAndMarket(european);
         }
 
+         /// <summary>
+         /// Calibrates the model parameters to fit the market data as closely as possible
+         /// </summary>
         public void Calibrate()
         {
             outcome = CalibrationOutcome.NotStarted;
@@ -169,6 +189,9 @@ namespace HestonCalibrationAndPricing
             }
         }
 
+         /// <summary>
+         /// Obtains the calibration status of the model, as well as the models pricing error
+         /// </summary>
         public void GetCalibrationStatus(ref CalibrationOutcome calibOutcome, ref double pricingError)
         {
             calibOutcome = outcome;
@@ -176,6 +199,9 @@ namespace HestonCalibrationAndPricing
             pricingError = CalculateMeanSquaredErrorBetweenModelAndMarket(m);
         }
 
+         /// <summary>
+         /// Creates an instance of the class Options with the calibrated parameters.
+         /// </summary>
         public Options GetCalibratedModel()
         {
             Options m = new Options(r, S, calibratedParams);

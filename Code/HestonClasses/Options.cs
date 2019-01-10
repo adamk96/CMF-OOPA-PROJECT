@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace HestonCalibrationAndPricing
 {
+    /// <summary>
+    /// This class prices options within the Heston model
+    /// </summary>
     public class Options
     {
         public const int numberParams = 5;
@@ -18,8 +21,6 @@ namespace HestonCalibrationAndPricing
         public const int vIndex = 4;
 
         private double r;
-        // private double T;
-        // private double K;
         private double kappaStar;
         private double thetaStar;
         private double sigma;
@@ -52,6 +53,12 @@ namespace HestonCalibrationAndPricing
             v = parameters[vIndex];
         }
 
+         /// <summary>
+         /// Prices a European call option within the Heston model.
+         /// </summary>
+         /// <param name = "T">The maturity date of the option in years.</param>
+         /// <param name = "K">The options' strike price.</param>
+         /// <returns>Option price.</returns>
         public double EuropeanCallPrice(double T, double K)
         {
             if (T < 0 || K < 0)
@@ -89,6 +96,12 @@ namespace HestonCalibrationAndPricing
             return S * P[0] - K * Math.Exp(-r * T) * P[1];
         }
 
+         /// <summary>
+         /// Prices a European put option within the Heston model.
+         /// </summary>
+         /// <param name = "T">The maturity date of the option in years.</param>
+         /// <param name = "K">The options' strike price.</param>
+         /// <returns>Option price.</returns>
         public double EuropeanPutPrice(double T, double K)
         {
             if (T < 0 || K < 0)
@@ -98,6 +111,10 @@ namespace HestonCalibrationAndPricing
             return EuropeanCallPrice(T, K) - S + K * Math.Exp(-r * T);
         }
 
+         /// <summary>
+         /// Forms an array of the model parameters.
+         /// </summary>
+         /// <returns>Model parameters.</returns>
         public double[] ParamsAsArray()
         {
             double[] paramsArray = new double[Options.numberParams];

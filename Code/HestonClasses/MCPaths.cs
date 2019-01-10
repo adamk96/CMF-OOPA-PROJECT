@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace HestonCalibrationAndPricing
 {
+     /// <summary>
+     /// This class is used to create the Monte Carlo paths which will be used to price options within the Heston
+     /// model in the class OptionsMC
+     /// </summary>
     public class MCPaths
     {
         private double r;
@@ -27,8 +31,13 @@ namespace HestonCalibrationAndPricing
             this.thetaStar = thetaStar; this.sigma = sigma; this.v = v;
         }
 
-
-
+         /// <summary>
+         /// Returns a simulated future price for a risky asset within the Heston model.
+         /// </summary>
+         /// <param name = "T">The future time at which we wish to simulate the asset price.</param>
+         /// <param name = "S">The initial asset price.</param>
+         /// <param name = "numberTimeStepsPerPath">The number of steps we wish the scheme to take to reach time T.</param>
+         /// <returns>Simulated asset price.</returns>
         public double PathGenerator(double T, double S, int numberTimeStepsPerPath)
         {
             if (T <= 0 || S <= 0 || numberTimeStepsPerPath <= 0)
@@ -62,6 +71,13 @@ namespace HestonCalibrationAndPricing
             return s;
         }
 
+         /// <summary>
+         /// Returns a simulated future price for a risky asset within the Heston model using anithetic sampling with a view to reducing variance.
+         /// </summary>
+         /// <param name = "T">The future time at which we wish to simulate the asset price.</param>
+         /// <param name = "S">The initial asset price.</param>
+         /// <param name = "numberTimeStepsPerPath">The number of steps we wish the scheme to take to reach time T.</param>
+         /// <returns>Simulated asset price.</returns>
         public double[] PathGeneratorAnithetic(double T, double S, int numberTimeStepsPerPath)
         {
             if (T <= 0 || S <= 0 || numberTimeStepsPerPath <= 0)
