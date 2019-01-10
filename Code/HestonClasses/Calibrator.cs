@@ -80,9 +80,9 @@ namespace HestonCalibrationAndPricing
         /// </summary>
         public void SetGuessParameters(double kappaStar, double thetaStar, double sigma, double rho, double v)
         {
-            if (sigma <= 0)
+            if (sigma <= 0 || v <= 0)
             {
-                throw new System.ArgumentException("Sigma must be positive");
+                throw new System.ArgumentException("Sigma, v must be positive");
             }
 
             Options e = new Options(r, S, kappaStar, thetaStar, sigma, rho, v);

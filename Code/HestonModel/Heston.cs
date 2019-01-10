@@ -43,8 +43,7 @@ namespace HestonModel
             Options e = cal.GetCalibratedModel();
             double[] paramArray = e.ParamsAsArray();
             CalibrationOutcome outcome1 = (CalibrationOutcome)outcome;
-
-            //maybe do another constructor without 0s.
+            
             AnotherInterfaceFill fill = new AnotherInterfaceFill(0, paramArray[Options.kappaIndex], paramArray[Options.thetaIndex], paramArray[Options.sigmaIndex], paramArray[Options.rhoIndex], paramArray[Options.vIndex], 0, 0, 0, 0, outcome1, error);
             return fill;
         }

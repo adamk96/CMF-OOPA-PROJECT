@@ -7,6 +7,9 @@ using HestonModel.Interfaces;
 
 namespace HestonModel.InterfaceImplement
 {
+    /// <summary>
+    /// This class is used to implement the interface IHestonCalibrationResult.
+    /// </summary>
     public class AnotherInterfaceFill : IHestonCalibrationResult
     {
         IHestonModelParameters paramms;

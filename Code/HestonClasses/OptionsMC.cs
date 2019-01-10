@@ -35,7 +35,7 @@ namespace HestonCalibrationAndPricing
                 throw new System.ArgumentException("Feller condition violated.");
             }
 
-            if (r <= 0 || K <= 0 || sigma <= 0 || S <= 0)
+            if (r <= 0 || K <= 0 || sigma <= 0 || S <= 0 || v <= 0)
             {
                 throw new System.ArgumentException("r, K, sigma, S must be positive");
             }
@@ -51,7 +51,7 @@ namespace HestonCalibrationAndPricing
             {
                 throw new System.ArgumentException("Feller condition violated.");
             }
-            if (r <= 0 || K <= 0 || sigma <= 0 || S <= 0)
+            if (r <= 0 || K <= 0 || sigma <= 0 || S <= 0 || v <= 0)
             {
                 throw new System.ArgumentException("r, K, sigma, S must be positive");
             }
@@ -69,7 +69,7 @@ namespace HestonCalibrationAndPricing
             {
                 throw new System.ArgumentException("Feller condition violated.");
             }
-            if (r <= 0 || K <= 0 || sigma <= 0 || S <= 0)
+            if (r <= 0 || K <= 0 || sigma <= 0 || S <= 0 || v <= 0)
             {
                 throw new System.ArgumentException("r, K, sigma, S must be positive");
             }

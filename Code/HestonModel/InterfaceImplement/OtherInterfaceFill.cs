@@ -7,6 +7,9 @@ using HestonModel.Interfaces;
 
 namespace HestonModel.InterfaceImplement
 {
+    /// <summary>
+    /// This class is used to implement the interfaces IHestonModelParameters and ICalibrationResult
+    /// </summary>
     public class OtherInterfaceFill : IHestonModelParameters, ICalibrationResult
     {
         double S;
@@ -15,8 +18,6 @@ namespace HestonModel.InterfaceImplement
         CalibrationOutcome c;
         double error;
 
-
-        //note opposite order to normal
         public OtherInterfaceFill(double T, double kappa, double theta, double sigma, double rho, double v, int numberTrials, int numberTimeSteps, double S, double r, CalibrationOutcome c, double error)
         {
             this.S = S; this.r = r;

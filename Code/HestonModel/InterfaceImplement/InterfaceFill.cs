@@ -7,6 +7,9 @@ using HestonModel.Interfaces;
 
 namespace HestonModel.InterfaceImplement
 {
+    /// <summary>
+    /// This class is used to implement several interfaces.
+    /// </summary>
     public class InterfaceFill : IOption, IVarianceProcessParameters, IMonteCarloSettings, IAsianOption, IEuropeanOption, ICalibrationSettings
     {
         double T;

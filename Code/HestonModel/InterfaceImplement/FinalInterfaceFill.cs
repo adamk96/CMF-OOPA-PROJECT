@@ -7,6 +7,9 @@ using HestonModel.Interfaces;
 
 namespace HestonModel.InterfaceImplement
 {
+    /// <summary>
+    /// This class is used to implement the interface IOptionMarketData when it takes IEuropeanOption.
+    /// </summary>
     public class FinalInterfaceFill : IOptionMarketData<IEuropeanOption>
     {
         double price;

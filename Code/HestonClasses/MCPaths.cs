@@ -22,9 +22,9 @@ namespace HestonCalibrationAndPricing
 
         public MCPaths(double r, double kappaStar, double thetaStar, double sigma, double rho, double v)
         {
-            if (r <= 0 || sigma <= 0)
+            if (r <= 0 || sigma <= 0 || v <= 0)
             {
-                throw new System.ArgumentException("r, sigma must be positive");
+                throw new System.ArgumentException("r, sigma, v must be positive");
             }
 
             this.r = r; this.rho = rho; this.kappaStar = kappaStar;

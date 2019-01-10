@@ -31,9 +31,9 @@ namespace HestonCalibrationAndPricing
 
         public Options(double r, double S, double kappaStar, double thetaStar, double sigma, double rho, double v)
         {
-            if (r <= 0 || S <= 0 || sigma <= 0)                 //check what other params need be positive
+            if (r <= 0 || S <= 0 || sigma <= 0 || v <= 0)                 //check what other params need be positive
             {
-                throw new System.ArgumentException("r, S, sigma must be positive");
+                throw new System.ArgumentException("r, S, sigma, v must be positive");
             }
             this.r = r; this.S = S; this.kappaStar = kappaStar; this.thetaStar = thetaStar;
             this.sigma = sigma; this.rho = rho; this.v = v;
@@ -45,12 +45,13 @@ namespace HestonCalibrationAndPricing
             kappaStar = parameters[kappaIndex];
             thetaStar = parameters[thetaIndex];
             sigma = parameters[sigmaIndex];
-            if (r <= 0 || S <= 0 || sigma <= 0)                 //check what other params need be positive
-            {
-                throw new System.ArgumentException("r, S, sigma must be positive");
-            }
             rho = parameters[rhoIndex];
             v = parameters[vIndex];
+            if (r <= 0 || S <= 0 || sigma <= 0 || v <= 0)                 //check what other params need be positive
+            {
+                throw new System.ArgumentException("r, S, sigma, v must be positive");
+            }
+            
         }
 
          /// <summary>
