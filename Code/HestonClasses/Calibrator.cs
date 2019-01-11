@@ -161,7 +161,7 @@ namespace HestonCalibrationAndPricing
 
             alglib.minlbfgsstate state;
             alglib.minlbfgsreport rep;
-            alglib.minlbfgscreatef(4, initialParams, diffstep, out state);
+            alglib.minlbfgscreatef(5, initialParams, diffstep, out state);
             alglib.minlbfgssetcond(state, epsg, epsf, epsx, maxits);
             alglib.minlbfgssetstpmax(state, stpmax);
 
