@@ -109,7 +109,7 @@ namespace HestonCalibrationAndPricing
                 s = s + r * s * tau + y * s * deltaZ1;
                 s1 = s1 + r * s1 * tau - y1 * s1 * deltaZ1;
                 double a = (y + gamma * deltaZ2) / (2 * (1 - beta * tau));
-                double aa = -(y1 + gamma * deltaZ2) / (2 * (1 - beta * tau));
+                double aa = (y1 - gamma * deltaZ2) / (2 * (1 - beta * tau));
                 y = a + Math.Sqrt(a * a + alpha * tau / (1 - beta * tau));
                 y1 = aa + Math.Sqrt(aa * aa + alpha * tau / (1 - beta * tau));
             }
