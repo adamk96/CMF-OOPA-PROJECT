@@ -82,10 +82,10 @@ namespace HestonModel
                 parameters.VarianceParameters.V0, parameters.InitialStockPrice);
             if(europeanOption.Type == 0)
             {
-                return option.EuropeanCallOptionPriceMC(europeanOption.Maturity, monteCarloSimulationSettings.NumberOfTimeSteps, monteCarloSimulationSettings.NumberOfTrials);
+                return option.EuropeanCallOptionPriceMCAnitheticParallel(europeanOption.Maturity, monteCarloSimulationSettings.NumberOfTimeSteps, monteCarloSimulationSettings.NumberOfTrials);
             }
             else
-                return option.EuropeanPutOptionPriceMC(europeanOption.Maturity, monteCarloSimulationSettings.NumberOfTimeSteps, monteCarloSimulationSettings.NumberOfTrials);
+                return option.EuropeanPutOptionPriceMCAnitheticParallel(europeanOption.Maturity, monteCarloSimulationSettings.NumberOfTimeSteps, monteCarloSimulationSettings.NumberOfTrials);
         }
 
         /// <summary>

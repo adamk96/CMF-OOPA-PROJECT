@@ -61,8 +61,10 @@ namespace MyTesting
 
             OptionsMC options = new OptionsMC(0.1, 100, 2, 0.06, 0.4, 0.5, 0.04, 100);
             Options options1 =  new Options(0.1, 100, 2, 0.06, 0.4, 0.5, 0.04);
-            Console.WriteLine(options.EuropeanPutOptionPriceMC(1, 365, 100000));
-            Console.WriteLine(options1.EuropeanPutPrice(1, 100));
+            Console.WriteLine(options.EuropeanCallOptionPriceMCAnithetic(1, 365, 100000));
+            Console.WriteLine(options.EuropeanCallOptionPriceMC(1, 365, 100000));
+            Console.WriteLine(options.EuropeanCallOptionPriceMCAnitheticParallel(1, 365, 100000));
+            Console.WriteLine(options1.EuropeanCallPrice(1, 100));
             Console.ReadKey();
         }
     }

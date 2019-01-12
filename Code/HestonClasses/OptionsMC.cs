@@ -170,11 +170,68 @@ namespace HestonCalibrationAndPricing
             return Math.Exp(-r * T) * count / (2 * numberPaths);
         }
 
-         /// <summary>
-         /// Checks that the times used for pricing Asian options make sense.
-         /// </summary>
-         /// <param name = "T">An array containing the onservation times of the Asian option.</param>
-         /// <param name = "exerciseT">The Asian option's exercise time.</param>
+        /// <summary>
+        /// Prices a European call option within the Heston model using Monte Carlo methods using both parallelisation and anithetic sampling .
+        /// </summary>
+        /// <param name = "T">The maturity date of the option in years.</param>
+        /// <param name = "numberTimeStepsPerPath">The number of steps we wish our path generator to take to reach time T.</param>
+        /// <param name = "numberPaths">The number of simulations we wish to run.</param>
+        /// <returns>Option price.</returns>
+        public double EuropeanCallOptionPriceMCAnitheticParallel(double T, int numberTimeStepsPerPath, int numberPaths)
+        {
+            if (T <= 0 || numberTimeStepsPerPath <= 0 || numberPaths <= 0)
+            {
+                throw new System.ArgumentException("Parameters must be positive");
+            }
+
+            int halfNumPaths = (int)Math.Ceiling(numberPaths / 2.0);
+            double count = 0;
+            MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
+
+            Parallel.For(0, halfNumPaths, (i) =>
+            {
+                double[] paths = path.PathGeneratorAnithetic(T, S, numberTimeStepsPerPath);
+                double pathAdd = Math.Max(paths[0] - K, 0) + Math.Max(paths[1] - K, 0);
+                Interlocked.Exchange(ref count, count + pathAdd);
+            });
+
+            return Math.Exp(-r * T) * count / (2.0 * halfNumPaths);
+        }
+
+        /// <summary>
+        /// Prices a European put option within the Heston model using Monte Carlo methods using both parallelisation and anithetic sampling .
+        /// </summary>
+        /// <param name = "T">The maturity date of the option in years.</param>
+        /// <param name = "numberTimeStepsPerPath">The number of steps we wish our path generator to take to reach time T.</param>
+        /// <param name = "numberPaths">The number of simulations we wish to run.</param>
+        /// <returns>Option price.</returns>
+        public double EuropeanPutOptionPriceMCAnitheticParallel(double T, int numberTimeStepsPerPath, int numberPaths)
+        {
+            if (T <= 0 || numberTimeStepsPerPath <= 0 || numberPaths <= 0)
+            {
+                throw new System.ArgumentException("Parameters must be positive");
+            }
+
+            int halfNumPaths = (int)Math.Ceiling(numberPaths / 2.0);
+            double count = 0;
+            MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
+
+            Parallel.For(0, halfNumPaths, (i) =>
+            {
+                double[] paths = path.PathGeneratorAnithetic(T, S, numberTimeStepsPerPath);
+                double pathAdd = Math.Max(K - paths[0], 0) + Math.Max(K - paths[1], 0);
+                Interlocked.Exchange(ref count, count + pathAdd);
+            });
+
+            return Math.Exp(-r * T) * count / (2.0 * halfNumPaths);
+        }
+
+
+        /// <summary>
+        /// Checks that the times used for pricing Asian options make sense.
+        /// </summary>
+        /// <param name = "T">An array containing the onservation times of the Asian option.</param>
+        /// <param name = "exerciseT">The Asian option's exercise time.</param>
         private void CheckAsianOptionInputs(double[] T, double exerciseT)
         {
             if (T.Length == 0)
