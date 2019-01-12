@@ -161,13 +161,14 @@ namespace HestonCalibrationAndPricing
                 throw new System.ArgumentException("Parameters must be positive");
             }
 
+            int halfNumPaths = (int)Math.Ceiling(numberPaths / 2.0);
             double count = 0;
             MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
-            for (int i = 0; i < numberPaths; i++)
+            for (int i = 0; i < halfNumPaths; i++)
             {
                 count += Math.Max(path.PathGeneratorAnithetic(T, S, numberTimeStepsPerPath)[0] - K, 0) + Math.Max(path.PathGeneratorAnithetic(T, S, numberTimeStepsPerPath)[1] - K, 0);
             }
-            return Math.Exp(-r * T) * count / (2 * numberPaths);
+            return Math.Exp(-r * T) * count / (2 * halfNumPaths);
         }
 
         /// <summary>

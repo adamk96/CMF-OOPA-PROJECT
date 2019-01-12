@@ -65,6 +65,13 @@ namespace MyTesting
             Console.WriteLine(options.EuropeanCallOptionPriceMC(1, 365, 100000));
             Console.WriteLine(options.EuropeanCallOptionPriceMCAnitheticParallel(1, 365, 100000));
             Console.WriteLine(options1.EuropeanCallPrice(1, 100));
+
+            Console.WriteLine(options.EuropeanPutOptionPriceMCAnitheticParallel(1, 365, 100000));
+            Console.WriteLine(options1.EuropeanPutPrice(1, 100));
+
+            double[] TT = { 0.5, 1 };
+            Console.WriteLine(options.PriceAsianCallMC(TT, 1, 100000, 365));
+            Console.WriteLine(options.PriceAsianCallMCParallel(TT, 1, 100000, 365));
             Console.ReadKey();
         }
     }
