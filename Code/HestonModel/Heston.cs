@@ -26,15 +26,18 @@ namespace HestonModel
         /// <returns>Object implementing IHestonCalibrationResult interface which contains calibrated model parameters and additional diagnostic information</returns>
         public static IHestonCalibrationResult CalibrateHestonParameters(IHestonModelParameters guessModelParameters, IEnumerable<IOptionMarketData<IEuropeanOption>> referenceData, ICalibrationSettings calibrationSettings)
         {
+            // set up calibrator
             Calibrator cal = new Calibrator(guessModelParameters.RiskFreeRate, guessModelParameters.InitialStockPrice, calibrationSettings.MaximumNumberOfIterations, calibrationSettings.Accuracy);
             cal.SetGuessParameters(guessModelParameters.VarianceParameters.Kappa, guessModelParameters.VarianceParameters.Theta,
                 guessModelParameters.VarianceParameters.Sigma, guessModelParameters.VarianceParameters.Rho, guessModelParameters.VarianceParameters.V0);
 
+            // add market data
             foreach (IOptionMarketData<IEuropeanOption> data in referenceData)
             {
                 cal.AddObservedOption(data.Option.StrikePrice, data.Option.Maturity, data.Price);
             }
 
+            // calibrate, get error, outcome, parameters
             cal.Calibrate();
             double error = 0;
             HestonCalibrationAndPricing.CalibrationOutcome outcome = HestonCalibrationAndPricing.CalibrationOutcome.NotStarted;
@@ -44,6 +47,7 @@ namespace HestonModel
             double[] paramArray = e.ParamsAsArray();
             CalibrationOutcome outcome1 = (CalibrationOutcome)outcome;
             
+            // implement and return IHestonCalibrationResult
             AnotherInterfaceFill fill = new AnotherInterfaceFill(0, paramArray[Options.kappaIndex], paramArray[Options.thetaIndex], paramArray[Options.sigmaIndex], paramArray[Options.rhoIndex], paramArray[Options.vIndex], 0, 0, 0, 0, outcome1, error);
             return fill;
         }
@@ -80,6 +84,7 @@ namespace HestonModel
             OptionsMC option = new OptionsMC(parameters.RiskFreeRate, europeanOption.StrikePrice, parameters.VarianceParameters.Kappa,
                 parameters.VarianceParameters.Theta, parameters.VarianceParameters.Sigma, parameters.VarianceParameters.Rho,
                 parameters.VarianceParameters.V0, parameters.InitialStockPrice);
+
             if(europeanOption.Type == 0)
             {
                 return option.EuropeanCallOptionPriceMCAnitheticParallel(europeanOption.Maturity, monteCarloSimulationSettings.NumberOfTimeSteps, monteCarloSimulationSettings.NumberOfTrials);
