@@ -142,13 +142,16 @@ namespace HestonCalibrationAndPricing
          /// </summary>
         public void Calibrate()
         {
-            outcome = CalibrationOutcome.NotStarted;
 
+            // set up for calibration
+            outcome = CalibrationOutcome.NotStarted;
             double[] initialParams = new double[Options.numberParams];
+
             if (calibratedParams == null)
             {
                 throw new System.Exception("Please add an initial guess for parameters");
             }
+
             calibratedParams.CopyTo(initialParams, 0);  
             double epsg = accuracy;
             double epsf = accuracy; 
@@ -157,14 +160,13 @@ namespace HestonCalibrationAndPricing
             int maxits = maxIts; 
             double stpmax = 0.05;
 
-
-
             alglib.minlbfgsstate state;
             alglib.minlbfgsreport rep;
             alglib.minlbfgscreatef(5, initialParams, diffstep, out state);
             alglib.minlbfgssetcond(state, epsg, epsf, epsx, maxits);
             alglib.minlbfgssetstpmax(state, stpmax);
 
+            // calibrate and return outcome, error
             alglib.minlbfgsoptimize(state, CalibrationObjectiveFunction, null, null);
             double[] resultParams = new double[Options.numberParams];
             alglib.minlbfgsresults(state, out resultParams, out rep);

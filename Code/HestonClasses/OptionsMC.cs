@@ -89,8 +89,11 @@ namespace HestonCalibrationAndPricing
                 throw new System.ArgumentException("Parameters must be positive");
             }
 
+            // set up counter and path generator
             double count = 0;
             MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
+
+            // generate paths, evaluate payoff on each, then average and discount
             for (int i = 0; i < numberPaths; i++)
             {                
                 count += Math.Max(path.PathGenerator(T, S, numberTimeStepsPerPath) - K, 0);
@@ -112,8 +115,11 @@ namespace HestonCalibrationAndPricing
                 throw new System.ArgumentException("Parameters must be positive");
             }
 
+            // set up counter and path generator
             double count = 0;
             MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
+
+            // generate paths, evaluate payoff on each, then average and discount
             for (int i = 0; i < numberPaths; i++)
             {                
                 count += Math.Max(K - path.PathGenerator(T, S, numberTimeStepsPerPath), 0);
@@ -135,15 +141,19 @@ namespace HestonCalibrationAndPricing
                 throw new System.ArgumentException("Parameters must be positive");
             }
 
+            // set up counter and path generator
             double count = 0;
             MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
 
+            // generate paths in parallel, evaluate payoff on each
             Parallel.For(0, numberPaths, (i) =>
             {
                 double pathAdd = Math.Max(path.PathGenerator(T, S, numberTimeStepsPerPath) - K, 0);
+                // update count in such a way as to protect thread safety
                 Interlocked.Exchange(ref count, count + pathAdd);
             });
 
+            // average and discount
             return Math.Exp(-r * T) * count / numberPaths;
         }
 
@@ -161,13 +171,18 @@ namespace HestonCalibrationAndPricing
                 throw new System.ArgumentException("Parameters must be positive");
             }
 
-            int halfNumPaths = (int)Math.Ceiling(numberPaths / 2.0);
+            // set up counter and path generator
             double count = 0;
             MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
+
+            // generate two paths half as many times, evaluate payoff on each
+            int halfNumPaths = (int)Math.Ceiling(numberPaths / 2.0);
             for (int i = 0; i < halfNumPaths; i++)
             {
                 count += Math.Max(path.PathGeneratorAnithetic(T, S, numberTimeStepsPerPath)[0] - K, 0) + Math.Max(path.PathGeneratorAnithetic(T, S, numberTimeStepsPerPath)[1] - K, 0);
             }
+
+            // average and discount
             return Math.Exp(-r * T) * count / (2 * halfNumPaths);
         }
 
@@ -185,10 +200,12 @@ namespace HestonCalibrationAndPricing
                 throw new System.ArgumentException("Parameters must be positive");
             }
 
-            int halfNumPaths = (int)Math.Ceiling(numberPaths / 2.0);
+            // set up counter and path generator
             double count = 0;
             MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
 
+            // generate two paths half as many times, in parallel, evaluate payoff on each
+            int halfNumPaths = (int)Math.Ceiling(numberPaths / 2.0);
             Parallel.For(0, halfNumPaths, (i) =>
             {
                 double[] paths = path.PathGeneratorAnithetic(T, S, numberTimeStepsPerPath);
@@ -196,6 +213,7 @@ namespace HestonCalibrationAndPricing
                 Interlocked.Exchange(ref count, count + pathAdd);
             });
 
+            // average and discount
             return Math.Exp(-r * T) * count / (2.0 * halfNumPaths);
         }
 
@@ -213,10 +231,12 @@ namespace HestonCalibrationAndPricing
                 throw new System.ArgumentException("Parameters must be positive");
             }
 
-            int halfNumPaths = (int)Math.Ceiling(numberPaths / 2.0);
+            // set up counter and path generator
             double count = 0;
             MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
 
+            // generate two paths half as many times, in parallel, evaluate payoff on each
+            int halfNumPaths = (int)Math.Ceiling(numberPaths / 2.0);
             Parallel.For(0, halfNumPaths, (i) =>
             {
                 double[] paths = path.PathGeneratorAnithetic(T, S, numberTimeStepsPerPath);
@@ -224,6 +244,7 @@ namespace HestonCalibrationAndPricing
                 Interlocked.Exchange(ref count, count + pathAdd);
             });
 
+            // average and discount
             return Math.Exp(-r * T) * count / (2.0 * halfNumPaths);
         }
 
@@ -265,10 +286,16 @@ namespace HestonCalibrationAndPricing
             {
                 throw new System.ArgumentException("Monte Carlo settings must be positive");
             }
+
+            // check parameters make sense
             CheckAsianOptionInputs(T, exerciseT);
+
+            // set up parameter, path generator and counter
             int M = T.Length;
             MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
             double pathCounter = 0;
+
+            // generate paths between observation times, evaluate payoff function 
             for (int i = 0; i < numberPaths; i++)
             {
                 double priceCount = 0;
@@ -279,6 +306,8 @@ namespace HestonCalibrationAndPricing
                 {
                     if (j > 0)
                         deltaT = T[j] - T[j - 1];
+
+                    // generate path from previous time point to next with appropriate number time steps
                     int stepNumber = (int)Math.Ceiling(deltaT * numberTimeStepsPerPath / exerciseT); 
                     holder = path.PathGenerator(deltaT, holder, stepNumber);
                     priceCount += holder;
@@ -286,6 +315,8 @@ namespace HestonCalibrationAndPricing
                 double pathPayoff = Math.Max(priceCount / M - K, 0);
                 pathCounter += pathPayoff;
             }
+
+            // average and discount
             return Math.Exp(-r * exerciseT) * (pathCounter / numberPaths);
         }
 
@@ -303,10 +334,16 @@ namespace HestonCalibrationAndPricing
             {
                 throw new System.ArgumentException("Monte Carlo settings must be positive");
             }
+
+            // check parameters make sense
             CheckAsianOptionInputs(T, exerciseT);
+
+            // set up parameter, path generator and counter
             int M = T.Length;
             MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
             double pathCounter = 0;
+
+            // generate paths between observation times, evaluate payoff function 
             for (int i = 0; i < numberPaths; i++)
             {
                 double priceCount = 0;
@@ -317,6 +354,8 @@ namespace HestonCalibrationAndPricing
                 {
                     if (j > 0)
                         deltaT = T[j] - T[j - 1];
+
+                    // generate path from previous time point to next with appropriate number time steps
                     int stepNumber = (int)Math.Ceiling(deltaT * numberTimeStepsPerPath / exerciseT); 
                     holder = path.PathGenerator(deltaT, holder, stepNumber);
                     priceCount += holder;
@@ -324,6 +363,8 @@ namespace HestonCalibrationAndPricing
                 double pathPayoff = Math.Max(K - priceCount / M, 0);
                 pathCounter += pathPayoff;
             }
+
+            // average and discount
             return Math.Exp(-r * exerciseT) * (pathCounter / numberPaths);
         }
 
@@ -342,11 +383,15 @@ namespace HestonCalibrationAndPricing
                 throw new System.ArgumentException("Monte Carlo settings must be positive");
             }
 
+            // check parameters make sense
             CheckAsianOptionInputs(T, exerciseT);
+
+            // set up parameter, path generator and counter
             int M = T.Length;
             double pathCounter = 0;
-            MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);  
+            MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v);
 
+            // generate paths between observation times in parallel, evaluate payoff function 
             Parallel.For(0, numberPaths, (i) =>
             {
                 double priceCount = 0;
@@ -356,6 +401,8 @@ namespace HestonCalibrationAndPricing
                 {
                     if (j > 0)
                         deltaT = T[j] - T[j - 1];
+
+                    // generate path from previous time point to next with appropriate number time steps
                     int stepNumber = (int)Math.Ceiling(deltaT * numberTimeStepsPerPath / exerciseT);
                     holder = path.PathGenerator(deltaT, holder, stepNumber);
                     Interlocked.Exchange(ref priceCount, priceCount + holder);
@@ -363,6 +410,8 @@ namespace HestonCalibrationAndPricing
                 double pathPayoff = Math.Max((priceCount / M) - K, 0);
                 Interlocked.Exchange(ref pathCounter, pathCounter + pathPayoff);
             });
+
+            // average and discount
             return Math.Exp(-r * exerciseT) * (pathCounter / numberPaths);
         }
         
@@ -380,23 +429,30 @@ namespace HestonCalibrationAndPricing
                 throw new System.ArgumentException("Parameters must be positive");
             }
 
+            // set up counter, parameter and path generator
             double pathCounter = 0;
             double deltaT = exerciseT / numberTimeStepsPerPath;
             MCPaths path = new MCPaths(r, kappaStar, thetaStar, sigma, rho, v); 
 
+            // generate paths of length numberTimeStepsPerPaths, evaluate payoff on each 
             for (double i = 0; i < numberPaths; i++)
             {
                 double min = S;
                 double holder = S;
                 for (double j = 0; j <= exerciseT; j += deltaT)
                 {
+                    // take a step with appropriate time change and start point
                     holder = path.PathGenerator(deltaT, holder, 1);
+
+                    // keep track of minimum
                     if (holder < min)
                         min = holder;
                 }
 
                 pathCounter += holder - min;
             }
+
+            // average and discount
             return Math.Exp(-r * exerciseT) * (pathCounter / numberPaths);
         }
     }

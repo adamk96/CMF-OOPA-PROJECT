@@ -47,7 +47,8 @@ namespace HestonCalibrationAndPricing
             sigma = parameters[sigmaIndex];
             rho = parameters[rhoIndex];
             v = parameters[vIndex];
-            if (r <= 0 || S <= 0 || sigma <= 0 || v <= 0)                 //check what other params need be positive
+
+            if (r <= 0 || S <= 0 || sigma <= 0 || v <= 0)                 
             {
                 throw new System.ArgumentException("r, S, sigma, v must be positive");
             }
@@ -67,15 +68,15 @@ namespace HestonCalibrationAndPricing
                 throw new System.ArgumentException("T, K must be non-negative");
             }
 
+            // set up paramters
             double[] b = { kappaStar - rho * sigma, kappaStar };
             double[] u = { 0.5, -0.5 };
-
             double a = kappaStar * thetaStar;
             Complex i = new Complex(0, 1);
 
+            // function implementing part of Heston formula
             Func<int, double, double> RealP = (j, phi) =>
             {
-                // j must be 0 or 1.
 
                 Complex temp1 = new Complex(-b[j], rho * sigma * phi);
                 Complex tempp1 = new Complex(-phi * phi, 2 * u[j] * phi);
@@ -91,9 +92,10 @@ namespace HestonCalibrationAndPricing
 
             double[] P = new double[2];
             
-            //decide on these
+            // integrate with appropriate number of steps and length to approximate infinite integral
             P[0] = 0.5 + (1.0 / Math.PI) * SimpsonRule.IntegrateComposite(x => RealP(0, x), 0.000001, 50, 100);
             P[1] = 0.5 + (1.0 / Math.PI) * SimpsonRule.IntegrateComposite(x => RealP(1, x), 0.000001, 50, 100);
+
             return S * P[0] - K * Math.Exp(-r * T) * P[1];
         }
 
@@ -109,6 +111,8 @@ namespace HestonCalibrationAndPricing
             {
                 throw new System.ArgumentException("T, K must be non-negative");
             }
+
+            // put call parity
             return EuropeanCallPrice(T, K) - S + K * Math.Exp(-r * T);
         }
 
