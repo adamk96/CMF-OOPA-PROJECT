@@ -10,3 +10,15 @@ C:\Users\adamk\OneDrive\Documents\GitHub\final-project-adamk96\Code\HestonClasse
 C:\Users\adamk\OneDrive\Documents\GitHub\final-project-adamk96\Code\HestonClasses\obj\Debug\HestonClasses.pdb
 C:\Users\adamk\OneDrive\Documents\GitHub\final-project-adamk96\Code\HestonClasses\bin\Debug\AlglibCSharpLib.dll
 C:\Users\adamk\OneDrive\Documents\GitHub\final-project-adamk96\Code\HestonClasses\bin\Debug\AlglibCSharpLib.pdb
+C:\Users\gawli\OneDrive - University of Edinburgh\OOPA2018\FinalProject\Final-Project-01-24-2019-09-48-45\adamk96\Code\HestonClasses\bin\Debug\HestonClasses.dll.config
+C:\Users\gawli\OneDrive - University of Edinburgh\OOPA2018\FinalProject\Final-Project-01-24-2019-09-48-45\adamk96\Code\HestonClasses\bin\Debug\HestonClasses.dll
+C:\Users\gawli\OneDrive - University of Edinburgh\OOPA2018\FinalProject\Final-Project-01-24-2019-09-48-45\adamk96\Code\HestonClasses\bin\Debug\HestonClasses.pdb
+C:\Users\gawli\OneDrive - University of Edinburgh\OOPA2018\FinalProject\Final-Project-01-24-2019-09-48-45\adamk96\Code\HestonClasses\bin\Debug\AlglibCSharpLib.dll
+C:\Users\gawli\OneDrive - University of Edinburgh\OOPA2018\FinalProject\Final-Project-01-24-2019-09-48-45\adamk96\Code\HestonClasses\bin\Debug\MathNet.Numerics.dll
+C:\Users\gawli\OneDrive - University of Edinburgh\OOPA2018\FinalProject\Final-Project-01-24-2019-09-48-45\adamk96\Code\HestonClasses\bin\Debug\AlglibCSharpLib.pdb
+C:\Users\gawli\OneDrive - University of Edinburgh\OOPA2018\FinalProject\Final-Project-01-24-2019-09-48-45\adamk96\Code\HestonClasses\bin\Debug\MathNet.Numerics.xml
+C:\Users\gawli\OneDrive - University of Edinburgh\OOPA2018\FinalProject\Final-Project-01-24-2019-09-48-45\adamk96\Code\HestonClasses\obj\Debug\HestonCalibrationAndPricing.csprojAssemblyReference.cache
+C:\Users\gawli\OneDrive - University of Edinburgh\OOPA2018\FinalProject\Final-Project-01-24-2019-09-48-45\adamk96\Code\HestonClasses\obj\Debug\HestonCalibrationAndPricing.csproj.CoreCompileInputs.cache
+C:\Users\gawli\OneDrive - University of Edinburgh\OOPA2018\FinalProject\Final-Project-01-24-2019-09-48-45\adamk96\Code\HestonClasses\obj\Debug\HestonCalibrationAndPricing.csproj.CopyComplete
+C:\Users\gawli\OneDrive - University of Edinburgh\OOPA2018\FinalProject\Final-Project-01-24-2019-09-48-45\adamk96\Code\HestonClasses\obj\Debug\HestonClasses.dll
+C:\Users\gawli\OneDrive - University of Edinburgh\OOPA2018\FinalProject\Final-Project-01-24-2019-09-48-45\adamk96\Code\HestonClasses\obj\Debug\HestonClasses.pdb
