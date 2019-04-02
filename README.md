@@ -24,7 +24,7 @@ The deadline is Monday, 14 January 2019 at 12:00.
 If you have any problems please don't hesitate to either mention it on Gitter for everyone's benefit  [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/OOPA2018/Final-Project?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) or email me directly at [v1wgawli@ed.ac.uk](mailto:v1wgawli@ed.ac.uk).
 
 ## Grade
-Please refer to '.\Code\HestonXLGrading\TestStudentsHestonGradingXL.xlsm'.
+Grade will be provided here once the project is graded.
 
 ## Feedback
-Please refer to '.\Code\HestonXLGrading\TestStudentsHestonGradingXL.xlsm'.
+Feedback will be provided here once the project is graded.
