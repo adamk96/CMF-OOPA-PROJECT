@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HestonModel", "HestonModel\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlglibCSharpLib", "AlglibCSharpLib\AlglibCSharpLib.csproj", "{13D4EE49-7122-4A45-B4A4-FCF70AF15A3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HestonModel.Tests", "HestonModel.Tests\HestonModel.Tests.csproj", "{1A41D57F-B2DE-4DA8-A044-4B9AE59B294A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HestonCalibrationAndPricing", "HestonClasses\HestonCalibrationAndPricing.csproj", "{BF166922-F23F-4DB2-BDCF-493074623730}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{13D4EE49-7122-4A45-B4A4-FCF70AF15A3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13D4EE49-7122-4A45-B4A4-FCF70AF15A3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13D4EE49-7122-4A45-B4A4-FCF70AF15A3B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1A41D57F-B2DE-4DA8-A044-4B9AE59B294A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1A41D57F-B2DE-4DA8-A044-4B9AE59B294A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1A41D57F-B2DE-4DA8-A044-4B9AE59B294A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1A41D57F-B2DE-4DA8-A044-4B9AE59B294A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BF166922-F23F-4DB2-BDCF-493074623730}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BF166922-F23F-4DB2-BDCF-493074623730}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF166922-F23F-4DB2-BDCF-493074623730}.Release|Any CPU.ActiveCfg = Release|Any CPU
